@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Sep  2 18:04:24 2018
+
+@author: Jayesh Asrani
+"""
+# Importing the libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import Imputer
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Importing the dataset
+dataset = pd.read_csv('Data.csv')
+
+# Setting Dependent and Independent Variables
+X = dataset.iloc[:, 0:3].values
+Y = dataset.iloc[:, -1].values
+
+# Handling Missing Data - Mean,Median,Most_Frequent stratergies
+imputer = Imputer(missing_values='NaN', strategy='mean', axis=0)
+imputer = imputer.fit(X[:, 1:])
+X[:, 1:3] = imputer.transform(X[:, 1:3])
+
+# Encoding Categorical Data - Label Encoding
+labelencoder_X = LabelEncoder()
+X[:, 0] = labelencoder_X.fit_transform(X[:, 0])
+
+labelencoder_Y = LabelEncoder()
+Y = labelencoder_Y.fit_transform(Y)
+
+# Encoding Categorical Data - One Hot Vector Encoding
+onehotencoder = OneHotEncoder(categorical_features=[0])
+X = onehotencoder.fit_transform(X).toarray()
+
+# Splitting the DataSet into Training and Test
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.20, random_state=42)
+
+# Feature Scaling
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test)
