@@ -1,4 +1,4 @@
 # MachineLearning
 
-A simple  python repo to collate my ML learnings
+Python repo to collate my ML learnings
 # MachineLearning
